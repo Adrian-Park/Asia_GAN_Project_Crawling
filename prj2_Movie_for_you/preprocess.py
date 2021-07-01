@@ -11,14 +11,14 @@ import pandas as pd
 from konlpy.tag import Okt
 import re
 
-df = pd.read_csv('prj2_Movie_for_you/crawling/reviews_2019.csv', index_col = 0)
+df = pd.read_csv('./crawling/reviews_2017.csv', index_col = 0)
 print(df.head())
 
 # 형태소 분리
 okt = Okt()
 
 # 불용어 ]
-stopwords = pd.read_csv('/content/stopwords.csv', index_col=0)
+stopwords = pd.read_csv('./crawling/stopwords.csv', index_col=0)
 print(stopwords.head())
 
 movie_stopwords = ['영화', '배우', '감독']
@@ -53,5 +53,5 @@ print(df.info())
 
 df = df[['titles', 'cleaned_sentences']] # 타이틀과 전처리가 된 문장만 뽑아내기
 print(df.info())
-df.to_csv('/content/cleaned_review_2019.csv') # 재저장
+df.to_csv('./crawling/cleaned_review_2017.csv') # 재저장
 
