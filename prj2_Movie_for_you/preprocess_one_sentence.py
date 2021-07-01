@@ -2,6 +2,7 @@ import pandas as pd
 
 df = pd.read_csv('./crawling/cleaned_review_2019.csv', index_col=0)
 df.dropna(inplace=True)
+df.to_csv('./crawling/cleaned_review_2019.csv')
 
 one_sentences = [] # 빈 리스트 생성
 for title in df['titles'].unique(): # 영화 제목들 한 번씩만
