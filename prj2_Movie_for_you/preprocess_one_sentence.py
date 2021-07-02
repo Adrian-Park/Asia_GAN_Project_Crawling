@@ -1,6 +1,6 @@
 import pandas as pd
 
-df = pd.read_csv('./crawling/cleaned_review_2020.csv', index_col=0)
+df = pd.read_csv('./crawling/cleaned_review/cleaned_review_2016.csv', index_col=0)
 df.dropna(inplace=True)
 df.to_csv('./crawling/cleaned_review_2020.csv')
 
@@ -13,7 +13,7 @@ for title in df['titles'].unique(): # 영화 제목들 한 번씩만
 df_one_sentences = pd.DataFrame({'titles':df['titles'].unique(), 'reviews':one_sentences})
 print(df_one_sentences.head())
 
-df_one_sentences.to_csv('./crawling/one_sentence_review_2020.csv')
+df_one_sentences.to_csv('./crawling/one_sentece_review/one_sentence_review_2016.csv')
 
 # for idx, title in enumerate(df['titles'].unique()):
 #     temp = df[df['titles'] == title]['cleaned_reviews']
