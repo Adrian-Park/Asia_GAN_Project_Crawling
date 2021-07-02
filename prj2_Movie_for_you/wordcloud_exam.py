@@ -15,14 +15,14 @@ font_name = font_manager.FontProperties(fname=fontpath).get_name()
 rc('font', family=font_name)
 mpl.font_manager._rebuild()
 
-df = pd.read_csv('./crawling/one_sentence_review_2019.csv', index_col=0)
+df = pd.read_csv('./crawling/one_sentence_review_2016_2021.csv', index_col=0)
 df.dropna(inplace=True) # nan값 제거
 # print(df.info())
 #
 # print(df.head())
 
 # 지정 인덱스 값의 제목이 같은 로우 찾기
-movie_index = df[df['titles'] == '0.0MHz'].index[0]
+movie_index = df[df['titles'] == '슈퍼 햄찌 (SUPER FURBALL)'].index[0]
 print(movie_index)
 print(df.reviews[movie_index])
 
@@ -36,11 +36,12 @@ worddict = dict(worddict) # dict 형태로 변환
 print(worddict)
 
 # 워드클라우드에서 제외할 단어 선정
-stopwords = ['관객', '작품']
+stopwords = ['관객', '작품', '주인공', '개봉', '촬영', '출연']
 
 # stopword 적용 O
 wordcloud_img = WordCloud(background_color='white', max_words=2000,
                           font_path=fontpath,
+                          collocations=False,
                           stopwords=stopwords).generate(df.reviews[movie_index])
 # stopword 적용 X
 wordcloud_img = WordCloud(background_color='white', max_words=2000,
