@@ -3,6 +3,7 @@ import pandas as pd
 from sklearn.metrics.pairwise import linear_kernel
 from scipy.io import mmwrite,mmread
 import pickle
+from gensim.models import Word2Vec
 
 # 데이터 로드
 df_review_one_sentence = pd.read_csv('./crawling/one_sentence_review_2016_2021.csv', index_col=0)
@@ -40,15 +41,37 @@ def getRecommendation(cosine_sim): # cosine_sim 매개변수, 유사도 비교 (
     recMovieList = df_review_one_sentence.iloc[movieidx] # df_review_one_sentence에서 movieidx 값으로 row 인덱싱
     return  recMovieList
 
-# 영화제목으로 찾기
+# 영화제목으로 추천
 # movie_idx = df_review_one_sentence[df_review_one_sentence['titles']=='라이온 킹 (The Lion King)'].index[0]
 
-# 영화 인덱스로 검색
-movie_idx = 2185
-print(df_review_one_sentence.iloc[movie_idx,0])
+# # 영화 인덱스로 검색
+# movie_idx = 2185
+# print(df_review_one_sentence.iloc[movie_idx,0])
 
-cosine_sim = linear_kernel(Tfidf_matrix[movie_idx], Tfidf_matrix) # linear_kernel로 코사인 유사도를 구함
-recommendation = getRecommendation(cosine_sim) # getRecommendation에 코사인 값을 넘김으로써
-# print(recommendation)
-# 제목만 보고 싶으면
-print(recommendation.iloc[:, 0])
+# cosine_sim = linear_kernel(Tfidf_matrix[movie_idx], Tfidf_matrix) # linear_kernel로 코사인 유사도를 구함
+# recommendation = getRecommendation(cosine_sim) # getRecommendation에 코사인 값을 넘김으로써
+# # print(recommendation)
+# # 제목만 보고 싶으면
+# print(recommendation.iloc[:, 0])
+
+# 키워드 기반 추천
+embedding_model = Word2Vec.load('./models/word2VecModel_2016_2021.model')
+key_word = '봉준호'
+sentence = [key_word] * 10
+
+# if key_word in embedding_model.wv.vocab:
+sim_word = embedding_model.wv.most_similar(key_word, topn=10)
+labels = []
+for label, _ in sim_word:
+    labels.append(label)
+print(labels)
+for i, word in enumerate(labels):
+    sentence += [word] * (9-i) # 입력된 단어와 그 이후로 유사한 단어를 -1개씩 쭉 출력
+sentence = ' '.join(sentence)
+print(sentence)
+
+sentence_vec = Tfidf.transform([sentence]) # sentence 벡터 생성
+cosine_sim = linear_kernel(sentence_vec, Tfidf_matrix) # 코사인 값 검색
+recommendation = getRecommendation(cosine_sim)
+
+print(recommendation['titles'])
